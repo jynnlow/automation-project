@@ -15,7 +15,7 @@ func InitDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&model.Map{})
+	err = db.AutoMigrate(&model.Map{}, &model.AuditLog{})
 	if err != nil {
 		return nil, err
 	}

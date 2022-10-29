@@ -24,9 +24,18 @@ func main() {
 		DB: db,
 	}
 
+	auditModel := &model.AuditLogCRUD{
+		DB: db,
+	}
+
 	//Init handler
 	mapHandler := &handler.MapHandler{
-		MapModel: mapModel,
+		MapModel:   mapModel,
+		AuditModel: auditModel,
+	}
+
+	auditHandler := &handler.AuditHandler{
+		AuditModel: auditModel,
 	}
 
 	//Init router
@@ -38,6 +47,10 @@ func main() {
 	r.HandleFunc("/get", mapHandler.GetByKey).Methods("GET")
 	r.HandleFunc("/", mapHandler.Update).Methods("PUT")
 	r.HandleFunc("/", mapHandler.Delete).Methods("DELETE")
+	r.HandleFunc("/revert", mapHandler.Revert).Methods("PUT")
+
+	r.HandleFunc("/audit", auditHandler.List).Methods("GET")
+	r.HandleFunc("/audit/get", auditHandler.GetListByKey).Methods("GET")
 
 	fmt.Println("HTTP server running on http://127.0.0.1:8080")
 
