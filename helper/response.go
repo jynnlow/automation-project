@@ -33,5 +33,8 @@ func SuccessRes(w http.ResponseWriter, message string, details interface{}) {
 	}
 
 	jsonRes, err := json.Marshal(res)
+	if err != nil {
+		log.Fatal(err)
+	}
 	_, err = w.Write(jsonRes)
 }

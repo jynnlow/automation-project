@@ -14,15 +14,15 @@ import (
 type MapHandlerInterface interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	List(w http.ResponseWriter, r *http.Request)
-	Get(w http.ResponseWriter, r *http.Request)
+	GetByKey(w http.ResponseWriter, r *http.Request)
 	Update(w http.ResponseWriter, r *http.Request)
 	Delete(w http.ResponseWriter, r *http.Request)
 	Revert(w http.ResponseWriter, r *http.Request)
 }
 
 type MapHandler struct {
-	MapModel   *model.MapCRUD
-	AuditModel *model.AuditLogCRUD
+	MapModel   model.MapCRUDInterface
+	AuditModel model.AuditLogCRUDInterface
 }
 
 func (m *MapHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -162,7 +162,6 @@ func (m *MapHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//set seed for random number
-
 	auditReq := &dto.AuditLogReq{
 		Timestamp:      int(time.Now().Unix()),
 		Map_id:         dbMap.ID,
@@ -192,7 +191,7 @@ func (m *MapHandler) Revert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//get record from audit log table from timpstap
+	//get record from audit log table by timpstamp
 	foundLog, err := m.AuditModel.GetByTimstamp(revReq.Timestamp)
 	if err != nil {
 		helper.ErrorRes(w, http.StatusBadRequest, err)
@@ -226,7 +225,7 @@ func (m *MapHandler) Revert(w http.ResponseWriter, r *http.Request) {
 
 	//insert in audit log table
 	auditReq := &dto.AuditLogReq{
-		Timestamp:      dbOriMap.Updated_at,
+		Timestamp:      int(time.Now().Unix()),
 		Map_id:         dbUpdatedMap.ID,
 		Key:            dbUpdatedMap.Key,
 		Original_value: dbOriMap.Value,

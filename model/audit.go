@@ -7,12 +7,12 @@ import (
 )
 
 type AuditLogCRUDInterface interface {
-	Create(*AuditLog) (*AuditLog, error)
+	Create(*dto.AuditLogReq) (*AuditLog, error)
 	List() ([]*AuditLog, error)
 	GetListByKey(string) ([]*AuditLog, error)
 	GetLatestByKey(string) (*AuditLog, error)
 	GetByTimstamp(int) (*AuditLog, error)
-	UpdateIsLatest(*AuditLog) (*AuditLog, error)
+	UpdateIsLatest(string) (*AuditLog, error)
 }
 
 type AuditLog struct {

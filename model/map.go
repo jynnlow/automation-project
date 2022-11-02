@@ -8,10 +8,10 @@ import (
 )
 
 type MapCRUDInterface interface {
-	Create(*Map) (*Map, error)
-	List() (*[]Map, error)
+	Create(*dto.MapReq) (*Map, error)
+	List() ([]*Map, error)
 	GetByKey(string) (*Map, error)
-	Update(*Map) (*Map, error)
+	Update(*dto.MapReq) (*Map, error)
 	Delete(string) (*Map, error)
 }
 
